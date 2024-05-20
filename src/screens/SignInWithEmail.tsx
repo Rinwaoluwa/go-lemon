@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View,} from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
 import {z} from "zod";
@@ -8,11 +8,12 @@ import {Button, LinkButton} from '../design-system/components/button';
 import Layout from '../design-system/components/Layout';
 import {Text} from '../design-system/components/text';
 import TextInput from '../design-system/components/TextInput';
-// import {useAuth} from '../context/auth';
 import type {AuthStackScreenProps} from '../../src/routes/types/auth-stack';
 import {useAppTheme} from '../theme';
-import {Box} from '../design-system/components/box/box';
 import { BASE_URL } from '../utils/constants';
+import {useDispatch} from 'react-redux';
+import {setIsAuthenticated} from '../utils/redux/slices/auth-tracker';
+import {storage} from '../utils/localStorage';
 
 const schema = z.object({
   email: z.string().email(),
@@ -22,9 +23,11 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithEmail'>) => {
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useAppTheme();
+  const dispatch = useDispatch();
 
-  const {control, handleSubmit, formState: {errors}} = useForm<FormValues>({
+  const {control, handleSubmit, formState: {errors}, setError} = useForm<FormValues>({
     defaultValues: {
       email: '',
       password: '',
@@ -35,12 +38,23 @@ const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithE
 
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const email = storage.getString("email");
+    const password = storage.getString("password");
     // Mock Login user
     const response = await fetch(BASE_URL + "login", {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({email: data.email, password: data.password}),
-    }).then(response => response.json()).then(data => console.log("returend data", data));
+    }).then(response => response.json()).then(data => {
+      if (data.email !== email || data.password !== password) {
+        setError("root", {
+          type: "manual",
+          message: "Invalid credentials!",
+        });
+        return;
+      };
+      dispatch(setIsAuthenticated(true));
+    });
   };
 
   return (

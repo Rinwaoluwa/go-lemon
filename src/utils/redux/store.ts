@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authTracker from "./slices/auth-tracker";
+import profile from "./slices/profile";
 
 export const store = configureStore({
     reducer: {
         authTracker,
+        profile,
     }
 });
 

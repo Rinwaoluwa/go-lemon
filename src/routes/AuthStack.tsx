@@ -4,6 +4,7 @@ import { Text } from '../design-system/components/text';
 import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
 import SignInWithEmailScreen from '../screens/SignInWithEmail';
 import CreateAccountScreen from '../screens/CreateAccount';
+import { useAppSelector } from '../utils/redux/hooks';
 
 const Stack = createNativeStackNavigator();
 

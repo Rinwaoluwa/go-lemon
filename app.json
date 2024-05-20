@@ -4,10 +4,10 @@
     "slug": "go-mango",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/go-mango-logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/bootsplash_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,9 +16,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/bootsplash_logo.png",
+        "backgroundColor": "#061D37"
+      },
+      "package": "com.rinwaoluwa.gomango"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,8 +29,12 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/IBMPlexSans-Medium.ttf", "./assets/fonts/IBMPlexSans-Regular.ttf", "./assets/fonts/IBMPlexSans-SemiBold.ttf",
-            "./assets/fonts/PlusJakartaSans-Bold.ttf", "./assets/fonts/PlusJakartaSans-Medium.ttf", "./assets/fonts/PlusJakartaSans-Regular.ttf"
+            "./assets/fonts/IBMPlexSans-Medium.ttf",
+            "./assets/fonts/IBMPlexSans-Regular.ttf",
+            "./assets/fonts/IBMPlexSans-SemiBold.ttf",
+            "./assets/fonts/PlusJakartaSans-Bold.ttf",
+            "./assets/fonts/PlusJakartaSans-Medium.ttf",
+            "./assets/fonts/PlusJakartaSans-Regular.ttf"
           ]
         }
       ]

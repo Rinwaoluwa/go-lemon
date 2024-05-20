@@ -30,22 +30,7 @@ function ListScreen() {
           details: '',
         },
         mode: 'onSubmit',
-    });
-
-    const onSubmit: SubmitHandler<FormValues> = async data => {
-        // await updateUserMutation.mutate(data, {
-        //   onSuccess: res => {
-        //     if (res._id) {
-        //       storeAccessToken(route.params);
-        //       if (isGuest) {
-        //         setIsGuest(false);
-        //         navigation.navigate('Home', {screen: 'Lists'});
-        //       }
-        //     }
-        //   },
-        // });
-      };
-
+    })
       const handleOpenSheet = () => {
         bottomSheetRef.current?.expand();
       };
