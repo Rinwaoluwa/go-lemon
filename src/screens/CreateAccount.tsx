@@ -53,7 +53,7 @@ const CreateAccountScreen = ({
 
   return (
     <Layout>
-        <Box backgroundColor="warm" height={100} paddingTop={50} paddingHorizontal={20}>
+        <Box backgroundColor="warm" height={120} paddingTop={60} paddingHorizontal={8}>
             <Text color="blue" variant="heading-1">Create Account.</Text>
         </Box>
         <View style={styles.inputContainer}>

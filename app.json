@@ -22,6 +22,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/IBMPlexSans-Medium.ttf", "./assets/fonts/IBMPlexSans-Regular.ttf", "./assets/fonts/IBMPlexSans-SemiBold.ttf",
+            "./assets/fonts/PlusJakartaSans-Bold.ttf", "./assets/fonts/PlusJakartaSans-Medium.ttf", "./assets/fonts/PlusJakartaSans-Regular.ttf"
+          ]
+        }
+      ]
+    ]
   }
 }

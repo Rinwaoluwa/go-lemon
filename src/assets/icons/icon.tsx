@@ -7,8 +7,8 @@ export default function Icon({name, size = 24, style, ...props}: IconProps) {
   const IconImplementation = ICONS[name];
   return IconImplementation ? (
     <IconImplementation
-      // width={getComputedWidth(size)}
-      // height={getComputedHeight(size)}
+      width={25}
+      height={25}
       {...props}
       style={style}
     />
