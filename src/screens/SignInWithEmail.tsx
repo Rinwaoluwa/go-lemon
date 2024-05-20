@@ -2,14 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
-import {yupResolver} from '@hookform/resolvers/yup';
-import {Button, LinkButton} from '../../design-system/components/button';
-import Layout from '../components/Layout';
-import Text from '../components/Text';
-import TextInput from '../components/TextInput';
+// import {yupResolver} from '@hookform/resolvers/yup';
+import {Button, LinkButton} from '../design-system/components/button';
+import Layout from '../design-system/components/Layout';
+import {Text} from '../design-system/components/text';
+import TextInput from '../design-system/components/TextInput';
 // import {useAuth} from '../context/auth';
-import type {AuthStackScreenProps} from '../../../src/routes/types/auth-stack';
+import type {AuthStackScreenProps} from '../../src/routes/types/auth-stack';
 import {useAppTheme} from '../theme';
+import { Box } from '../design-system/components/box/box';
 // import {signInWithEmailSchema} from '../utils/validator';
 
 type FormValues = {
@@ -17,136 +18,85 @@ type FormValues = {
 };
 
 const SignInWithEmailScreen = ({}: AuthStackScreenProps<'SignInWithEmail'>) => {
-  const navigation = useNavigation();
+//   const navigation = useNavigation();
   const theme = useAppTheme();
-  const {storeAccessToken, isGuest, setIsGuest} = useAuth();
+//   const {storeAccessToken, isGuest, setIsGuest} = useAuth();
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-    getValues,
-  } = useForm<FormValues>({
+  const {control, handleSubmit, formState: {errors}, getValues, } = useForm<FormValues>({
     defaultValues: {
       email: '',
     },
     mode: 'onSubmit',
-    resolver: yupResolver(signInWithEmailSchema),
+    // resolver: yupResolver(signInWithEmailSchema),
   });
 
-  useEffect(() => {
-    if (pinInputValue.length === 4) {
-      signInWithEmailMutation.mutate(
-        {
-          email: getValues().email,
-          otp: Number(pinInputValue),
-          otpId,
-        },
-        {
-          onSuccess: responseData => {
-            setPinInputValue('');
-            if (responseData) {
-              storeAccessToken(responseData);
-              if (isGuest) {
-                setIsGuest(false);
-                navigation.navigate('Home', {screen: 'Lists'});
-              }
-            }
-          },
-          onError: () => {
-            setPinInputValue('');
-          },
-        },
-      );
-    }
-    // TODO: fix this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pinInputValue]);
-
   const onSubmit: SubmitHandler<FormValues> = data => {
-    if (!showPinInput) {
-      sendOtpToEmailMutation.mutate(data.email, {
-        onSuccess: res => {
-          if (res.otpId) {
-            setOtpId(res.otpId);
-            setShowPinInput(true);
-            resetTimeLeft(120);
-          }
-        },
-      });
-    }
+    // if (!showPinInput) {
+    //   sendOtpToEmailMutation.mutate(data.email, {
+    //     onSuccess: res => {
+    //       if (res.otpId) {
+    //         setOtpId(res.otpId);
+    //         setShowPinInput(true);
+    //         resetTimeLeft(120);
+    //       }
+    //     },
+    //   });
+    // }
   };
 
   return (
     <>
-      <Layout>
-        {!showPinInput && (
-          <>
-            <TextInput
-              control={control}
-              label="Email addresss"
-              placeholder="Email address"
-              error={errors.email?.message}
-              name="email"
-              textContentType="emailAddress"
-              keyboardType="email-address"
-            />
-            <LinkButton
-              title="Log in with Phone number instead"
-              onPress={() => navigation.navigate('SignInWithPhone')}
-            />
-          </>
-        )}
-
-        {showPinInput && (
-          <>
-            <Text style={styles.text}>
-              Enter the 4-digit code sent to {getValues().email} to log in
-            </Text>
-            <PinInput value={pinInputValue} onChange={setPinInputValue} />
-
-            <View style={styles.resendContainer}>
-              {timeLeft <= 0 ? (
-                <LinkButton
-                  title="Resend"
-                  onPress={() => {
-                    resetTimeLeft(120);
-                    sendOtpToEmailMutation.mutate(getValues().email);
-                  }}
+        <Layout>
+            <Box backgroundColor="warm" height={100} paddingTop={30} paddingHorizontal={20}>
+                <Text color="blue" variant="heading-1">Sign In</Text>
+            </Box>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    control={control}
+                    label="Email addresss"
+                    placeholder="Email address"
+                    error={errors.email?.message}
+                    name="email"
+                    textContentType="emailAddress"
+                    keyboardType="email-address"
+                    />
+                <TextInput
+                    control={control}
+                    label="Password"
+                    placeholder="Password"
+                    // error={errors.password?.message}
+                    name="password"
+                    textContentType="password"
+                    secureTextEntry
                 />
-              ) : (
-                <Text
-                  style={{
-                    ...styles.countdownText,
-                    color: theme.colors.secondary,
-                  }}>
-                  {formattedTime}
-                </Text>
-              )}
+                <LinkButton
+                    title="Log in as a guest instead"
+                //   onPress={() => navigation.navigate('SignInWithPhone')}
+                />
+                <Button
+                    marginTop="space-32"
+                    title="Continue"
+                    //   onPress={handleSubmit(onSubmit)}
+                    //   loading={
+                        //     sendOtpToEmailMutation.isLoading ||
+                        //     signInWithEmailMutation.isLoading
+                        //   }
+                />
             </View>
-          </>
-        )}
-
-        <Button
-          marginTop="space-32"
-          title="Continue"
-          onPress={handleSubmit(onSubmit)}
-          loading={
-            sendOtpToEmailMutation.isLoading ||
-            signInWithEmailMutation.isLoading
-          }
-        />
-        <View style={styles.footer}>
-          <Text style={{...styles.footerText, color: theme.colors.secondary}}>
-            Contact Support at hello@golemon.co
-          </Text>
-        </View>
+            <View style={styles.footer}>
+                <Text style={{...styles.footerText, color: theme.colors.secondary}}>
+                    Contact Support at hello@gomango.co
+                </Text>
+            </View>
       </Layout>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  inputContainer:{
+    paddingHorizontal: 20,
+  },
   text: {
     marginTop: 16,
     fontSize: 14,

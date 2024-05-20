@@ -2,17 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import WelcomeScreen from './src/screens/onboarding/WelcomeScreen';
 import {ThemeProvider} from './src/design-system/theme/theme-provider';
-import theme from './theme';
+import SignInWithEmailScreen from './src/screens/SignInWithEmail';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <ThemeProvider>
         <StatusBar
-          barStyle="dark-content"
-          backgroundColor={theme.colors.secondary}
+          backgroundColor="warm"
         />
-        <WelcomeScreen />
+        {/* <WelcomeScreen /> */}
+        <SignInWithEmailScreen />
       </ThemeProvider>
     </View>
   );
