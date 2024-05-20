@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "go-mango",
+    "name": "gomango",
     "slug": "go-mango",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,15 +8,15 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/bootsplash_logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#061D37"
+      "backgroundColor": "#061D37",
+      "resizeMode": "cover"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rinwaoluwa.gomango"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/bootsplash_logo.png",
         "backgroundColor": "#061D37"
       },
       "package": "com.rinwaoluwa.gomango"
@@ -38,6 +38,11 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c9d29cc0-5c35-44e1-ac91-f818d7963b45"
+      }
+    }
   }
 }

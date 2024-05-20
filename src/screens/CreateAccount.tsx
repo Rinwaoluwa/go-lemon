@@ -64,9 +64,9 @@ const CreateAccountScreen = ({ navigation }: AuthStackScreenProps<'CreateAccount
     await storage.set("lastName", formData.lastName);
     await storage.set("email", formData.email);
     await storage.set("password", formData.password);
-
     await isLoggedIn.set("isLoggedIn", true);
     setIsLoading(false);
+    dispatch(setIsAuthenticated(true));
     navigation.navigate("Home");
   };
 

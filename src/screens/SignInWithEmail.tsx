@@ -40,17 +40,25 @@ const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithE
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const email = await storage.get("email");
-    const firstName = storage.get("firstName");
-    const lastName = storage.get("lastName");
+    const firstName = await storage.get("firstName");
+    const lastName = await storage.get("lastName");
     const password = await storage.get("password");
-
-
     setIsLoading(true);
-    const response = await fetch(BASE_URL + "login", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({email: data.email, password: data.password}),
-    }).then(response => response.json());
+    try {
+
+      const response = await fetch(BASE_URL + "login", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({email: data.email, password: data.password}),
+      })
+
+      const responseData = response.json();
+      console.log(responseData)
+
+    } catch(error) {
+      console.error(error)
+    }
+
     if (data.email !== email || data.password !== password) {
       setError("email", {
         type: "custom",
@@ -63,6 +71,7 @@ const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithE
       setIsLoading(false)
       return;
     };
+
     setIsLoading(false)
     dispatch(setIsAuthenticated(true));
     dispatch(updateProfile({firstName, lastName, email}))

@@ -5,7 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Box} from '../design-system/components/box/box';
 import {Text} from '../design-system/components/text';
 import Icon from '../assets/icons/icon';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const  BottomTab = createBottomTabNavigator();
 
@@ -25,8 +25,9 @@ function TabNavigatior () {
       }}/>
       <BottomTab.Screen name="Profile" component={ProfileScreen} options={{
         headerTitle: () => (
-          <Box backgroundColor="warm" height={120} width={"100%"} paddingTop={60}>
+          <Box backgroundColor="warm" height={120} paddingTop={60} width={500} style={styles.box}>
             <Text color="blue" variant="heading-2">Personal Information</Text>
+            <View></View>
           </Box>
         ),
         tabBarIcon: ({tint}) => <Icon name='edit' color={tint} />

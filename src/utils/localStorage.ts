@@ -25,3 +25,8 @@ export const isLoggedIn = createStorage({
     schema: loggedInSchema,
     AsyncStorage,
 })
+
+export function clear(name: string) {
+    storage.remove(name);
+    isLoggedIn(name);
+};

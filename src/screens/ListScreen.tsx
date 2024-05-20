@@ -1,11 +1,9 @@
-import React, {useRef, useMemo, useCallback, useState} from 'react';
-import {StyleSheet,View,ScrollView, Pressable, Modal} from 'react-native';
+import React, {useRef, useMemo, useState} from 'react';
+import {StyleSheet,View,ScrollView,} from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {Button, DualButton} from '../design-system/components/button';
 import Layout from '../design-system/components/Layout';
 import TextInput from '../design-system/components/TextInput';
-import type {AuthStackScreenProps} from '../routes/types/auth-stack';
-import {Box} from '../design-system/components/box/box';
 import {Text} from '../design-system/components/text';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import ListItem from '../design-system/components/list-item';
@@ -25,8 +23,7 @@ function ListScreen() {
     const [listItem, setListItem] = useState<FormValues[]>([]);
     const {firstName} = useAppSelector(state => state.profile);
 
-    const {
-        control,
+    const {control,
         handleSubmit,
         formState: {errors},
         reset,
