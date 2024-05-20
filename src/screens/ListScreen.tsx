@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback, useState} from 'react';
 import {StyleSheet,View,ScrollView, Pressable, Modal} from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {Button, DualButton} from '../design-system/components/button';
@@ -7,64 +7,79 @@ import TextInput from '../design-system/components/TextInput';
 import type {AuthStackScreenProps} from '../routes/types/auth-stack';
 import {Box} from '../design-system/components/box/box';
 import {Text} from '../design-system/components/text';
-import Icon from '../assets/icons/icon';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import ListItem from '../design-system/components/list-item';
+import { useAppSelector } from '../utils/redux/hooks';
 
 
 type FormValues = {
     title: string;
-    details: string;
-  };
+    description: string;
+    index?: number;
+};
+
 
 function ListScreen() {
     const bottomSheetRef = useRef<BottomSheet>(null);
-    const snapPoints = useMemo(() => ["25%","50%"], [])
+    const snapPoints = useMemo(() => ["25%","50%"], []);
+    const [listItem, setListItem] = useState<FormValues[]>([]);
+    const {firstName} = useAppSelector(state => state.profile);
 
     const {
         control,
         handleSubmit,
         formState: {errors},
+        reset,
       } = useForm<FormValues>({
         defaultValues: {
           title: '',
-          details: '',
+          description: '',
         },
         mode: 'onSubmit',
     })
-      const handleOpenSheet = () => {
+
+    const open = () => {
         bottomSheetRef.current?.expand();
-      };
+    };
 
-      const renderBackdrop = () => useCallback(() => (
-          <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} />
-      ), []);
+    const submit: SubmitHandler<FormValues> = async (data) => {
+        console.log("reached", data)
+        if(!data.description || !data.title) {
+            return;
+        }
 
-      const handleOnSubmit = () => {
+        setListItem(item => [...item, data]);
+        reset();
         bottomSheetRef.current?.close();
-    }
-    const handleCancel = () => {
-          bottomSheetRef.current?.close();
+    };
+    const close = () => {
+        bottomSheetRef.current?.close();
     }
 
     return (
         <>
             <Layout>
                 <View style={styles.header}>
-                    <Box backgroundColor="warm" height={120} paddingTop={60} paddingHorizontal={8} style={styles.box}>
-                        <Text color="black" variant="heading-2">Lists</Text>
-                        <Icon name='bell'/>
-                    </Box>
                 </View>
             <ScrollView style={styles.container}>
-                <Text color="grey1" variant="heading-2">Welcome, Rinwa 💚</Text>
-                <Text color="grey2" variant="body-semibold">
-                    Every GoMango experience starts with a List.
-                    Lists help you shop smartly.
-                </Text>
+                { listItem.length === 0 && (
+                    <>
+                        <Text color="grey1" variant="heading-2">Welcome, {firstName} 💚</Text>
+                        <Text color="grey2" variant="body-semibold">
+                            Every GoMango experience starts with a List.
+                            Lists help you shop smartly.
+                        </Text>
+                    </>
+                )}
 
+                {listItem.map((item, index) => (
+                    <ListItem key={index} index={index + 1} title={item.title} description={item.description} />
+                ))}
             </ScrollView>
 
-            <Button title="+" borderRadius={500} style={styles.addToList} onPress={handleOpenSheet} />
+            <View style={styles.addToList}>
+                <Button title="+" borderRadius={500} onPress={open} />
+            </View>
 
             <BottomSheet
                 index={1}
@@ -79,19 +94,19 @@ function ListScreen() {
                             control={control}
                             label="Title"
                             placeholder="Title"
-                                // error={errors.email?.message}
+                            error={errors.title?.message}
                             name="title"
                         />
                         <TextInput
                             control={control}
-                            label="Details"
-                            placeholder="Details"
-                            // error={errors.email?.message}
-                            name="details"
+                            label="Description"
+                            placeholder="description"
+                            error={errors.description?.message}
+                            name="description"
                             multiline={true}
                             minHeight={100}
-                            />
-                        <DualButton firstButton={{onPress: handleCancel}} secondButton={{onPress: handleOnSubmit}}  />
+                        />
+                        <DualButton firstButton={{onPress: close}} secondButton={{onPress: handleSubmit(submit)}}  />
                     </View>
                 </BottomSheetView>
             </BottomSheet>
@@ -103,15 +118,11 @@ function ListScreen() {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+        marginTop: 20,
     },
     header: {
         padding: 8,
         width: "100%",
-    },
-    box: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
     },
     bottomSheetContainer: {
         padding: 20,

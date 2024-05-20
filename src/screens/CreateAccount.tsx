@@ -8,10 +8,10 @@ import {Button} from '../design-system/components/button';
 import Layout from '../design-system/components/Layout';
 import TextInput from '../design-system/components/TextInput';
 import type {AuthStackScreenProps} from '../routes/types/auth-stack';
-import {useAppDispatch} from '../utils/redux/hooks';
+import {useAppDispatch, useAppSelector} from '../utils/redux/hooks';
 import {updateProfile} from '../utils/redux/slices/profile';
 import {setIsAuthenticated} from '../utils/redux/slices/auth-tracker';
-import { storage } from '../utils/localStorage';
+import { isLoggedIn, storage } from '../utils/localStorage';
 
 const schema = z.object({
   email: z.string().email(),
@@ -29,6 +29,7 @@ type FormValues = z.infer<typeof schema>;
 const CreateAccountScreen = ({ navigation }: AuthStackScreenProps<'CreateAccount'>) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const {isAuthenticated} =useAppSelector(state => state.authTracker)
 
   const {
     control,
@@ -47,22 +48,26 @@ const CreateAccountScreen = ({ navigation }: AuthStackScreenProps<'CreateAccount
   });
 
   const onSubmit: SubmitHandler<FormValues> = async formData => {
-    console.log(formData)
     // Mock Register user
     setIsLoading(true);
+
     const response = await fetch(BASE_URL + "register", {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({email: "eve.holt@reqres.in", password: "pistol"}),
     }).then(response => response.json()).then(data => storage.set("token", data.token));
+
+
     dispatch(updateProfile(formData)); // because we are mocikng registering a user we store
     //  the user data on device to simulate fetching data from backend;
-    storage.set("firstName", formData.firstName);
-    storage.set("lastName", formData.lastName);
-    storage.set("email", formData.email);
-    storage.set("password", formData.password);
-    dispatch(setIsAuthenticated(true));
+    await storage.set("firstName", formData.firstName);
+    await storage.set("lastName", formData.lastName);
+    await storage.set("email", formData.email);
+    await storage.set("password", formData.password);
+
+    await isLoggedIn.set("isLoggedIn", true);
     setIsLoading(false);
+    navigation.navigate("Home");
   };
 
   return (

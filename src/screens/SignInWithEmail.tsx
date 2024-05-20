@@ -14,6 +14,7 @@ import { BASE_URL } from '../utils/constants';
 import {useDispatch} from 'react-redux';
 import {setIsAuthenticated} from '../utils/redux/slices/auth-tracker';
 import {storage} from '../utils/localStorage';
+import { updateProfile } from '../utils/redux/slices/profile';
 
 const schema = z.object({
   email: z.string().email(),
@@ -38,23 +39,34 @@ const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithE
 
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const email = storage.getString("email");
-    const password = storage.getString("password");
-    // Mock Login user
+    const email = await storage.get("email");
+    const firstName = storage.get("firstName");
+    const lastName = storage.get("lastName");
+    const password = await storage.get("password");
+
+
+    setIsLoading(true);
     const response = await fetch(BASE_URL + "login", {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({email: data.email, password: data.password}),
-    }).then(response => response.json()).then(data => {
-      if (data.email !== email || data.password !== password) {
-        setError("root", {
-          type: "manual",
-          message: "Invalid credentials!",
-        });
-        return;
-      };
-      dispatch(setIsAuthenticated(true));
-    });
+    }).then(response => response.json());
+    if (data.email !== email || data.password !== password) {
+      setError("email", {
+        type: "custom",
+        message: "Invalid credentials!",
+      });
+      setError("password", {
+        type: "custom",
+        message: "Invalid credentials!",
+      });
+      setIsLoading(false)
+      return;
+    };
+    setIsLoading(false)
+    dispatch(setIsAuthenticated(true));
+    dispatch(updateProfile({firstName, lastName, email}))
+    navigation.navigate("Home")
   };
 
   return (
@@ -79,18 +91,12 @@ const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithE
                   textContentType="password"
                   secureTextEntry
                 />
-                <LinkButton
-                  title="Log in as a guest instead"
-                //   onPress={() => navigation.navigate('SignInWithPhone')}
-                />
                 <Button
                   marginTop="space-32"
                   title="Continue"
                   onPress={handleSubmit(onSubmit)}
-                  //   loading={
-                    //     sendOtpToEmailMutation.isLoading ||
-                    //     signInWithEmailMutation.isLoading
-                  //   }
+                    loading={isLoading}
+                    disabled={isLoading}
                 />
             </View>
             <View style={styles.footer}>

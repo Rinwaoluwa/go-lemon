@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/images/bootsplash_logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#061D37"
     },
     "ios": {
       "supportsTablet": true

@@ -1,23 +1,26 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-// import {yupResolver} from '@hookform/resolvers/yup';
-import {Button} from '../design-system/components/button';
 import Layout from '../design-system/components/Layout';
-import TextInput from '../design-system/components/TextInput';
-import type {AuthStackScreenProps} from '../routes/types/auth-stack';
-import {Box} from '../design-system/components/box/box';
 import {Text} from '../design-system/components/text';
+import { useAppDispatch, useAppSelector } from '../utils/redux/hooks';
+import { isLoggedIn, storage } from '../utils/localStorage';
+import { setIsAuthenticated } from '../utils/redux/slices/auth-tracker';
 
 function ProfileScreen() {
+    const {firstName, lastName, email} = useAppSelector(state => state.profile);
+    const dispatch = useAppDispatch();
+
+    async function handleLogout() {
+        await isLoggedIn.set("isLoggedIn", false);
+        storage.clear();
+        dispatch(setIsAuthenticated(false))
+    }
+
     return (
         <Layout>
-            <Box backgroundColor="warm" height={120} paddingTop={60} paddingHorizontal={20}>
-                <Text color="blue" variant="heading-2">Personal Information</Text>
-            </Box>
             <View style={styles.container}>
                 <Text color="blue" variant="body-semibold">Name</Text>
-                <Text style={styles.userData}>Rinwa Odejobi</Text>
+                <Text style={styles.userData}>{`${firstName} ${lastName}`}</Text>
             </View>
             {/* Button */}
             <TouchableOpacity>
@@ -40,12 +43,18 @@ function ProfileScreen() {
 
             <View style={styles.container}>
                 <Text>Email Address</Text>
-                <Text style={styles.userData}>peterodejobi9@gmail.com</Text>
+                <Text style={styles.userData}>{email}</Text>
             </View>
             {/* Button */}
             <TouchableOpacity>
                 <View style={styles.button}>
                     <Text style={styles.text}>update</Text>
+                </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.logout} onPress={handleLogout}>
+                <View style={styles.button}>
+                    <Text style={styles.text}>Logout</Text>
                 </View>
             </TouchableOpacity>
         </Layout>
@@ -72,6 +81,12 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: "center",
+    },
+    logout: {
+        width: "100%",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        marginTop:80,
     }
 })
 
