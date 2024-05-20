@@ -10,7 +10,7 @@ import TextInput from '../design-system/components/TextInput';
 // import {useAuth} from '../context/auth';
 import type {AuthStackScreenProps} from '../../src/routes/types/auth-stack';
 import {useAppTheme} from '../theme';
-import { Box } from '../design-system/components/box/box';
+import {Box} from '../design-system/components/box/box';
 // import {signInWithEmailSchema} from '../utils/validator';
 
 type FormValues = {
@@ -48,7 +48,7 @@ const SignInWithEmailScreen = ({}: AuthStackScreenProps<'SignInWithEmail'>) => {
     <>
         <Layout>
             <Box backgroundColor="warm" height={100} paddingTop={30} paddingHorizontal={20}>
-                <Text color="blue" variant="heading-1">Sign In</Text>
+                <Text color="blue" variant="heading-1">Sign In.</Text>
             </Box>
             <View style={styles.inputContainer}>
                 <TextInput
