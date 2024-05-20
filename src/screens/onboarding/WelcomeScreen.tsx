@@ -42,21 +42,16 @@ function WelcomeScreen({ navigation }: AuthStackScreenProps<'Welcome'>) {
                 borderTopLeftRadius="space-8"
                 marginBottom="space-32">
                 <Button
-                    title="Sign up"
-                    // onPress={() => navigation.navigate('PhoneInput')}
+                    title="Sign In"
+                    onPress={() => navigation.navigate('SignInWithEmail')}
                 />
                 <Button
                     marginBottom="space-32"
-                    title="Continue as a guest"
+                    title="Create an Account"
                     variant="secondary"
-                    // onPress={}
+                    onPress={() => navigation.navigate('CreateAccount')}
                     // loading={signInGuestUserMutation.isLoading}
                     // disabled={signInGuestUserMutation.isLoading}
-                />
-                <LinkButton
-                    title="Log in"
-                    // onPress={() => navigation.navigate('SignInWithPhone')}
-                    style={styles.linkButton}
                 />
             </Box>
         </Box>
@@ -64,9 +59,6 @@ function WelcomeScreen({ navigation }: AuthStackScreenProps<'Welcome'>) {
 };
 
 const styles = StyleSheet.create({
-    scrollViewContainer: {
-      height: '85%',
-    },
     container: {
       backgroundColor: '#fff',
       flex: 1,

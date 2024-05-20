@@ -8,8 +8,8 @@ const Tab = createBottomTabNavigator();
 function MainAppStack() {
   return (
     <Tab.Navigator initialRouteName="List">
-      <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="List" component={ListScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

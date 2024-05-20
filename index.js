@@ -1,9 +1,9 @@
 import {useCallback} from 'react';
+import {View} from 'react-native';
 import {registerRootComponent} from 'expo';
 import {StatusBar} from 'expo-status-bar';
 import {useFonts} from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import {View, ViewStyle} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {ThemeProvider} from './src/design-system/theme/theme-provider';
@@ -37,6 +37,7 @@ export default function App() {
   return (
     <GestureHandlerRootView style={FLEX} onLayout={onLayoutRootView}>
         <View onLayout={onLayoutRootView} style={FLEX}>
+            <StatusBar />
         <NavigationContainer >
             <ThemeProvider>
                 {auth ? <AuthStack /> : <MainAppStack />}
@@ -47,6 +48,6 @@ export default function App() {
   );
 }
 
-const FLEX: ViewStyle = {flex: 1};
+const FLEX = {flex: 1};
 
 registerRootComponent(App);

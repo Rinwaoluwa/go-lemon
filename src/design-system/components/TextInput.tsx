@@ -19,8 +19,6 @@ import {Box} from "../../design-system/components/box/box";
 import {useTheme} from '../theme/theme';
 import {fonts} from '../theme/fonts';
 import {useAppTheme} from '../../theme';
-// import useBottomSheetTextInput from 'src/hooks/useBottomSheetTextInput';
-
 
 interface TextInputProps extends Omit<RNTextInputProps, 'onBlur' | 'onFocus'> {
   label: string;

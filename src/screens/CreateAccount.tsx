@@ -10,6 +10,7 @@ import TextInput from '../design-system/components/TextInput';
 import type {AuthStackScreenProps} from '../routes/types/auth-stack';
 import {Box} from '../design-system/components/box/box';
 import {Text} from '../design-system/components/text';
+import { BASE_URL } from '../utils/constants';
 // import {createAccountSchema} from '../utils/validator';
 
 type FormValues = {
@@ -38,24 +39,23 @@ const CreateAccountScreen = ({
   });
 
   const onSubmit: SubmitHandler<FormValues> = async data => {
-    // await updateUserMutation.mutate(data, {
-    //   onSuccess: res => {
-    //     if (res._id) {
-    //       storeAccessToken(route.params);
-    //       if (isGuest) {
-    //         setIsGuest(false);
-    //         navigation.navigate('Home', {screen: 'Lists'});
-    //       }
-    //     }
-    //   },
-    // });
+    // Create a New uer
+    const resquest = await fetch(BASE_URL + "users", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({email: data.email, job: "teacher"}),
+    }).then(response => response.json()).then(data => console.log("user created", data));
+
+    // Mock Register user
+    const response = await fetch(BASE_URL + "register", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({email: "eve.holt@reqres.in", password: "pistol"}),
+    }).then(response => response.json()).then(data => console.log("data", data));
   };
 
   return (
     <Layout>
-        <Box backgroundColor="warm" height={120} paddingTop={60} paddingHorizontal={8}>
-            <Text color="blue" variant="heading-1">Create Account.</Text>
-        </Box>
         <View style={styles.inputContainer}>
             <TextInput
                 control={control}

@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
-// import {yupResolver} from '@hookform/resolvers/yup';
+import {z} from "zod";
+import {zodResolver} from '@hookform/resolvers/zod';
 import {Button, LinkButton} from '../design-system/components/button';
 import Layout from '../design-system/components/Layout';
 import {Text} from '../design-system/components/text';
@@ -11,81 +12,76 @@ import TextInput from '../design-system/components/TextInput';
 import type {AuthStackScreenProps} from '../../src/routes/types/auth-stack';
 import {useAppTheme} from '../theme';
 import {Box} from '../design-system/components/box/box';
-// import {signInWithEmailSchema} from '../utils/validator';
+import { BASE_URL } from '../utils/constants';
 
-type FormValues = {
-  email: '';
-};
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
 
-const SignInWithEmailScreen = ({}: AuthStackScreenProps<'SignInWithEmail'>) => {
-//   const navigation = useNavigation();
+type FormValues = z.infer<typeof schema>;
+
+const SignInWithEmailScreen = ({ navigation }: AuthStackScreenProps<'SignInWithEmail'>) => {
   const theme = useAppTheme();
-//   const {storeAccessToken, isGuest, setIsGuest} = useAuth();
 
-  const {control, handleSubmit, formState: {errors}, getValues, } = useForm<FormValues>({
+  const {control, handleSubmit, formState: {errors}} = useForm<FormValues>({
     defaultValues: {
       email: '',
+      password: '',
     },
     mode: 'onSubmit',
-    // resolver: yupResolver(signInWithEmailSchema),
+    resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormValues> = data => {
-    // if (!showPinInput) {
-    //   sendOtpToEmailMutation.mutate(data.email, {
-    //     onSuccess: res => {
-    //       if (res.otpId) {
-    //         setOtpId(res.otpId);
-    //         setShowPinInput(true);
-    //         resetTimeLeft(120);
-    //       }
-    //     },
-    //   });
-    // }
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    // Mock Login user
+    const response = await fetch(BASE_URL + "login", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({email: data.email, password: data.password}),
+    }).then(response => response.json()).then(data => console.log("returend data", data));
   };
 
   return (
     <>
         <Layout>
-            <Box backgroundColor="warm" height={120} paddingTop={60} paddingHorizontal={8}>
-                <Text color="blue" variant="heading-1">Sign In.</Text>
-            </Box>
             <View style={styles.inputContainer}>
                 <TextInput
-                    control={control}
-                    label="Email addresss"
-                    placeholder="Email address"
-                    error={errors.email?.message}
-                    name="email"
-                    textContentType="emailAddress"
-                    keyboardType="email-address"
-                    />
+                  control={control}
+                  label="Email addresss"
+                  placeholder="Email address"
+                  error={errors.email?.message}
+                  name="email"
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
+                />
                 <TextInput
-                    control={control}
-                    label="Password"
-                    placeholder="Password"
-                    // error={errors.password?.message}
-                    name="password"
-                    textContentType="password"
-                    secureTextEntry
+                  control={control}
+                  label="Password"
+                  placeholder="Password"
+                  error={errors.password?.message}
+                  name="password"
+                  textContentType="password"
+                  secureTextEntry
                 />
                 <LinkButton
-                    title="Log in as a guest instead"
+                  title="Log in as a guest instead"
                 //   onPress={() => navigation.navigate('SignInWithPhone')}
                 />
                 <Button
-                    marginTop="space-32"
-                    title="Continue"
-                    //   onPress={handleSubmit(onSubmit)}
-                    //   loading={
-                        //     sendOtpToEmailMutation.isLoading ||
-                        //     signInWithEmailMutation.isLoading
-                        //   }
+                  marginTop="space-32"
+                  title="Continue"
+                  onPress={handleSubmit(onSubmit)}
+                  //   loading={
+                    //     sendOtpToEmailMutation.isLoading ||
+                    //     signInWithEmailMutation.isLoading
+                  //   }
                 />
             </View>
             <View style={styles.footer}>
                 <Text style={{...styles.footerText, color: theme.colors.secondary}}>
-                    Contact Support at hello@gomango.co
+                  Contact Support at hello@gomango.co
                 </Text>
             </View>
       </Layout>
