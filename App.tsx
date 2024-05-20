@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import WelcomeScreen from './src/screens/onboarding/WelcomeScreen';
 import {ThemeProvider} from './src/design-system/theme/theme-provider';
 import SignInWithEmailScreen from './src/screens/SignInWithEmail';
+import CreateAccountScreen from './src/screens/CreateAccount';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 export default function App() {
   return (
@@ -12,7 +14,9 @@ export default function App() {
           backgroundColor="warm"
         />
         {/* <WelcomeScreen /> */}
-        <SignInWithEmailScreen />
+        {/* <SignInWithEmailScreen /> */}
+        {/* <CreateAccountScreen /> */}
+        <ProfileScreen />
       </ThemeProvider>
     </View>
   );

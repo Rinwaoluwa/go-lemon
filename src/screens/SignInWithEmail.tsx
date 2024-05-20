@@ -47,7 +47,7 @@ const SignInWithEmailScreen = ({}: AuthStackScreenProps<'SignInWithEmail'>) => {
   return (
     <>
         <Layout>
-            <Box backgroundColor="warm" height={100} paddingTop={30} paddingHorizontal={20}>
+            <Box backgroundColor="warm" height={100} paddingTop={50} paddingHorizontal={20}>
                 <Text color="blue" variant="heading-1">Sign In.</Text>
             </Box>
             <View style={styles.inputContainer}>
